@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe Valentine</title>
-    <link rel="shortcut icon" href="DALL·E 2025-02-12 09.56.19 - a minimalist favicon for a Tic Tac Toe game with a Valentine's theme. The design should feature a heart integrated with an X and O symbol in a playful.webp" type="image/x-icon">
     <style>
         body {
             display: flex;
@@ -15,9 +14,38 @@
             font-family: Arial, sans-serif;
             color: white;
             flex-direction: column;
+            overflow: hidden;
         }
-        h2 {
+        .front-page {
+            text-align: center;
+        }
+        .front-page h1 {
+            font-size: 36px;
+            color: #ff4b5c;
             margin-bottom: 20px;
+        }
+        .front-page p {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .play-btn {
+            background: #ff4b5c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .play-btn:hover {
+            background: #e63946;
+        }
+        .game-page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
         .board {
             display: grid;
@@ -58,15 +86,30 @@
     </style>
 </head>
 <body>
-    <h2>Play Tic Tac Toe to Win My Heart ❤️</h2>
-    <div class="board" id="board"></div>
-    <p class="message" id="message"></p>
-    <button class="btn" onclick="resetGame()">Restart</button>
+    <!-- Front Page -->
+    <div class="front-page" id="frontPage">
+        <h1>Want to Win My Heart? ❤️</h1>
+        <p>Play a game of Tic Tac Toe and see if you can win!</p>
+        <button class="play-btn" onclick="startGame()">Play Now</button>
+    </div>
+
+    <!-- Game Page -->
+    <div class="game-page" id="gamePage">
+        <h2>Play Tic Tac Toe to Win My Heart ❤️</h2>
+        <div class="board" id="board"></div>
+        <p class="message" id="message"></p>
+        <button class="btn" onclick="resetGame()">Restart</button>
+    </div>
     
     <script>
         let board = ['', '', '', '', '', '', '', '', ''];
         let currentPlayer = 'X';
         let gameActive = true;
+
+        function startGame() {
+            document.getElementById('frontPage').style.display = 'none';
+            document.getElementById('gamePage').style.display = 'flex';
+        }
 
         function renderBoard() {
             const boardElement = document.getElementById('board');
@@ -157,7 +200,7 @@
                 let [a, b, c] = combo;
                 if (board[a] && board[a] === board[b] && board[a] === board[c]) {
                     gameActive = false;
-                    document.getElementById('message').textContent = (board[a] === 'X') ? "Yay! You won ❤️ ,your prize is a free valentine's date with me!" : "Oops! I win!, it's okay-i'll take you out on a valentine's date!";
+                    document.getElementById('message').textContent = (board[a] === 'X') ?  "Yay! You won ❤️ ,your prize is a free valentine's date with me!" : "Oops! I win!, it's okay-i'll take you out on a valentine's date!";
                     return;
                 }
             }
@@ -181,10 +224,7 @@
                     return board[a];
                 }
             }
-
-            if (!board.includes('')) {
-                return 'tie';
-            }
+            if (!board.includes('')) return 'tie';
             return null;
         }
 
