@@ -88,8 +88,8 @@
 <body>
     <!-- Front Page -->
     <div class="front-page" id="frontPage">
-        <h1>Want to Win My Heart? ❤️</h1>
-        <p>Play a game of Tic Tac Toe and see if you can win!</p>
+        <h1>Lets play Tic Tac Toe? ❤️</h1>
+        <p>Valentine Edition!</p>
         <button class="play-btn" onclick="startGame()">Play Now</button>
     </div>
 
@@ -200,14 +200,14 @@
                 let [a, b, c] = combo;
                 if (board[a] && board[a] === board[b] && board[a] === board[c]) {
                     gameActive = false;
-                    document.getElementById('message').textContent = (board[a] === 'X') ?  "Yay! You won ❤️ ,your prize is a free valentine's date with me!" : "Oops! I win!, it's okay-i'll take you out on a valentine's date!";
+                    document.getElementById('message').textContent = (board[a] === 'X') ?  "Yay! You won ❤️ ,Your prize is a free valentine's date with me!" : "Oops! I win!, It's okay-i'll take you out on a valentine's date!";
                     return;
                 }
             }
             
             if (!board.includes('')) {
                 gameActive = false;
-                document.getElementById('message').textContent = "It's a draw! rematch is scheduled on February 14 💕";
+                document.getElementById('message').textContent = "It's a draw! Rematch is scheduled on February 14 💕";
             }
         }
 
