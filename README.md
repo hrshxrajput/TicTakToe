@@ -1,2 +1,2 @@
-# TicTakToe
+# TicTacToe
 project to impress my crush!!
