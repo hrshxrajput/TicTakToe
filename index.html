@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Valentine</title>
+    <link rel="shortcut icon" href="DALL·E 2025-02-12 09.56.19 - a minimalist favicon for a Tic Tac Toe game with a Valentine's theme. The design should feature a heart integrated with an X and O symbol in a playful.webp" type="image/x-icon">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1a1a2e;
+            font-family: Arial, sans-serif;
+            color: white;
+            flex-direction: column;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: white;
+            color: #ff4b5c;
+            font-size: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #ff4b5c;
+        }
+        .btn {
+            background: #ff4b5c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #e63946;
+        }
+    </style>
+</head>
+<body>
+    <h2>Play Tic Tac Toe to Win My Heart ❤️</h2>
+    <div class="board" id="board"></div>
+    <p class="message" id="message"></p>
+    <button class="btn" onclick="resetGame()">Restart</button>
+    
+    <script>
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        let gameActive = true;
+
+        function renderBoard() {
+            const boardElement = document.getElementById('board');
+            boardElement.innerHTML = '';
+            board.forEach((cell, index) => {
+                const cellElement = document.createElement('div');
+                cellElement.classList.add('cell');
+                cellElement.textContent = cell;
+                cellElement.addEventListener('click', () => handleMove(index));
+                boardElement.appendChild(cellElement);
+            });
+        }
+
+        function handleMove(index) {
+            if (!gameActive || board[index] !== '') return;
+            board[index] = currentPlayer;
+            checkWinner();
+            currentPlayer = 'O';
+            renderBoard();
+            if (gameActive) setTimeout(computerMove, 500); 
+        }
+
+        function computerMove() {
+            let bestScore = -Infinity;
+            let move;
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === '') {
+                    board[i] = 'O';
+                    let score = minimax(board, 0, false);
+                    board[i] = '';
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move = i;
+                    }
+                }
+            }
+            board[move] = 'O';
+            checkWinner();
+            currentPlayer = 'X';
+            renderBoard();
+        }
+
+        const scores = {
+            'X': -1,
+            'O': 1,
+            'tie': 0
+        };
+
+        function minimax(newBoard, depth, isMaximizing) {
+            let result = checkWin();
+            if (result !== null) {
+                return scores[result];
+            }
+
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < newBoard.length; i++) {
+                    if (newBoard[i] === '') {
+                        newBoard[i] = 'O';
+                        let score = minimax(newBoard, depth + 1, false);
+                        newBoard[i] = '';
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < newBoard.length; i++) {
+                    if (newBoard[i] === '') {
+                        newBoard[i] = 'X';
+                        let score = minimax(newBoard, depth + 1, true);
+                        newBoard[i] = '';
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function checkWinner() {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            
+            for (let combo of winningCombos) {
+                let [a, b, c] = combo;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    gameActive = false;
+                    document.getElementById('message').textContent = (board[a] === 'X') ? "Yay! You won ❤️ ,your prize is a free valentine's date with me!" : "Oops! I win!, it's okay-i'll take you out on a valentine's date!";
+                    return;
+                }
+            }
+            
+            if (!board.includes('')) {
+                gameActive = false;
+                document.getElementById('message').textContent = "It's a draw! rematch is scheduled on February 14 💕";
+            }
+        }
+
+        function checkWin() {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+
+            for (let combo of winningCombos) {
+                let [a, b, c] = combo;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a];
+                }
+            }
+
+            if (!board.includes('')) {
+                return 'tie';
+            }
+            return null;
+        }
+
+        function resetGame() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            gameActive = true;
+            document.getElementById('message').textContent = '';
+            renderBoard();
+        }
+
+        renderBoard();
+    </script>
+</body>
+</html>
